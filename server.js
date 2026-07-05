@@ -217,13 +217,41 @@ app.post('/api/bookings', async (req, res) => {
 
 app.get('/api/bookings', async (req, res) => {
   try {
+    const where = {};
+    if (req.query.email) {
+      where.userEmail = req.query.email;
+    }
     const bookings = await Booking.findAll({
-      include: [{ model: Event, attributes: ['title'] }],
+      where,
+      include: [{ model: Event, attributes: ['title', 'date', 'location'] }],
       order: [['createdAt', 'DESC']],
     });
     res.json(bookings);
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+});
+
+app.delete('/api/bookings/:id', async (req, res) => {
+  const transaction = await sequelize.transaction();
+  try {
+    const booking = await Booking.findByPk(req.params.id, { transaction, include: [Event] });
+    if (!booking) {
+      await transaction.rollback();
+      return res.status(404).json({ error: 'Reserva no encontrada' });
+    }
+
+    const event = booking.Event;
+    await event.update({
+      availableSeats: event.availableSeats + booking.ticketsCount,
+    }, { transaction });
+
+    await booking.destroy({ transaction });
+    await transaction.commit();
+    res.json({ message: 'Inscripción cancelada con éxito' });
+  } catch (error) {
+    await transaction.rollback();
+    res.status(400).json({ error: error.message });
   }
 });
 
@@ -258,6 +286,10 @@ app.get('/api/stats', async (req, res) => {
 // Serve frontend paths explicitly or fallback to static index/dashboard
 app.get('/dashboard', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'dashboard.html'));
+});
+
+app.get('/mis-inscripciones', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'mis-inscripciones.html'));
 });
 
 // Database Sync & Start Server

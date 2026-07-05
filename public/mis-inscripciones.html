@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicketEase | Mis Inscripciones</title>
+  <meta name="description" content="Consultá y cancelá tus inscripciones a eventos.">
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+  <header class="glass">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="ticket"></i>
+        <span>TicketEase</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Inicio</a>
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/mis-inscripciones" class="nav-link active">Mis Inscripciones</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero" style="margin-top: 2rem; margin-bottom: 2rem; text-align: left;">
+    <h1 style="font-size: 2.2rem; margin-bottom: 0.5rem;">Mis Inscripciones</h1>
+    <p style="margin: 0; font-size: 1rem;">Ingresá tu correo electrónico para ver tus inscripciones activas.</p>
+  </section>
+
+  <main>
+    <div class="dashboard-content" style="grid-template-columns: 1fr;">
+      <section class="dashboard-panel glass" style="max-width: 500px; margin: 0 auto;">
+        <h2>
+          <i data-lucide="search" style="color: var(--accent-primary);"></i>
+          <span>Buscar por correo</span>
+        </h2>
+        <div class="form-group" style="display: flex; gap: 0.75rem;">
+          <input type="email" id="email-input" class="form-control" placeholder="correo@ejemplo.com" required>
+          <button class="btn btn-primary" onclick="buscarInscripciones()" style="width: auto; padding: 0.75rem 1.5rem;">
+            <i data-lucide="search"></i>
+          </button>
+        </div>
+      </section>
+
+      <section class="dashboard-panel glass" id="resultados-section" style="display: none;">
+        <h2>
+          <i data-lucide="list" style="color: var(--accent-success);"></i>
+          <span id="resultados-titulo">Tus Inscripciones</span>
+        </h2>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Evento</th>
+                <th>Fecha</th>
+                <th>Entradas</th>
+                <th>Acción</th>
+              </tr>
+            </thead>
+            <tbody id="inscripciones-table-body">
+              <tr>
+                <td colspan="4" style="text-align: center; color: var(--text-muted); padding: 2rem;">Cargando...</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>
+  </main>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+  <script src="js/mis-inscripciones.js"></script>
+</body>
+</html>
