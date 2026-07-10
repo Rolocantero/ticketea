@@ -6,6 +6,13 @@ const resultadosTitulo = document.getElementById('resultados-titulo');
 const tableBody = document.getElementById('inscripciones-table-body');
 const toastContainer = document.getElementById('toast-container');
 
+// Auto-fill email if logged in
+const user = getUser();
+if (user && emailInput) {
+  emailInput.value = user.email;
+  setTimeout(buscarInscripciones, 300);
+}
+
 // Buscar inscripciones por email
 async function buscarInscripciones() {
   const email = emailInput.value.trim();

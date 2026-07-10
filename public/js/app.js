@@ -95,6 +95,11 @@ window.openBookingModal = function(id, title, location) {
   bookingEventTitle.textContent = title;
   bookingEventInfo.innerHTML = `<i data-lucide="map-pin" style="width: 14px; height: 14px;"></i> ${location}`;
   bookingForm.reset();
+  const user = getUser();
+  if (user) {
+    document.getElementById('userName').value = user.name;
+    document.getElementById('userEmail').value = user.email;
+  }
   bookingDialog.showModal();
   lucide.createIcons();
 };

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TicketEase | Crear Cuenta</title>
+  <link rel="stylesheet" href="css/styles.css">
+  <style>
+    .auth-container { max-width: 420px; margin: 4rem auto; }
+    .auth-card { padding: 2.5rem; border-radius: var(--radius-md); }
+    .auth-card h1 { font-size: 1.75rem; margin-bottom: 0.5rem; }
+    .auth-card p { color: var(--text-secondary); margin-bottom: 2rem; }
+    .auth-footer { text-align: center; margin-top: 1.5rem; color: var(--text-secondary); }
+    .auth-footer a { color: var(--accent-primary); font-weight: 500; }
+    .auth-footer a:hover { text-decoration: underline; }
+  </style>
+</head>
+<body>
+  <header class="glass">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i data-lucide="ticket"></i>
+        <span>TicketEase</span>
+      </a>
+      <nav class="nav-links">
+        <a href="/" class="nav-link">Inicio</a>
+        <a href="/dashboard" class="nav-link">Dashboard</a>
+        <a href="/mis-inscripciones" class="nav-link">Mis Inscripciones</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="auth-container">
+    <section class="auth-card glass">
+      <h1>Crear Cuenta</h1>
+      <p>Registrate para reservar entradas y gestionar tus eventos.</p>
+      <form id="register-form">
+        <div class="form-group">
+          <label for="reg-name">Nombre Completo</label>
+          <input type="text" id="reg-name" class="form-control" placeholder="Ej. Juan Pérez" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-email">Correo Electrónico</label>
+          <input type="email" id="reg-email" class="form-control" placeholder="correo@ejemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label for="reg-password">Contraseña</label>
+          <input type="password" id="reg-password" class="form-control" placeholder="Mínimo 4 caracteres" minlength="4" required>
+        </div>
+        <button type="submit" class="btn btn-primary">
+          <i data-lucide="user-plus"></i>
+          Crear Cuenta
+        </button>
+      </form>
+      <div class="auth-footer">
+        ¿Ya tenés cuenta? <a href="/login">Iniciar Sesión</a>
+      </div>
+    </section>
+  </main>
+
+  <div class="toast-container" id="toast-container"></div>
+
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script>lucide.createIcons();</script>
+  <script src="js/auth.js"></script>
+  <script>
+    document.getElementById('register-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const name = document.getElementById('reg-name').value.trim();
+      const email = document.getElementById('reg-email').value.trim();
+      const password = document.getElementById('reg-password').value;
+      try {
+        const res = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ name, email, password }),
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error);
+        localStorage.setItem('token', data.token);
+        localStorage.setItem('user', JSON.stringify(data.user));
+        showToast('Cuenta creada correctamente', 'success');
+        setTimeout(() => { window.location.href = '/'; }, 1000);
+      } catch (err) {
+        showToast(err.message, 'error');
+      }
+    });
+  </script>
+</body>
+</html>
