@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
+    "predev": "npx kill-port 3000",
     "dev": "nodemon server.js"
   },
   "dependencies": {
@@ -17,6 +18,7 @@
     "sqlite3": "^5.1.7"
   },
   "devDependencies": {
+    "kill-port": "^2.0.1",
     "nodemon": "^3.1.14"
   }
 }
